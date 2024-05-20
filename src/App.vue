@@ -6,24 +6,23 @@
     <div class="container">
       <h2>Pick a random Pokemon!</h2>
       <div class="card">
-        <div class="pokemon-info" v-if="pokemonOne">
-          <img :src="pokemonOne.sprites.front_default" alt="pokemon image">
-          <p>Name: {{ pokemonOne.name }}</p>
-          <p>HP: {{ pokemonOne.stats[0].base_stat }}</p>
-          <p>Type: {{ pokemonOne.types[0].type.name }}</p>
+        <div class="pokemon-info" v-if="pokemon">
+          <img :src="pokemon.sprites.front_default" alt="pokemon image">
+          <p>Name: {{ pokemon.name }}</p>
+          <p>HP: {{ pokemon.stats[0].base_stat }}</p>
+          <p>Type: {{ pokemon.types[0].type.name }}</p>
         </div>
       </div>
-      <button class="switch-button" @click="fetchPokemon('pokemonOne')">Switch Pokemon</button>
+      <button class="switch-button" @click="fetchPokemon('pokemon')">Switch Pokemon</button>
     </div>
   </div>
 
 
-<div id="game">
-  <div>
-  <h1 class="game_title">
+  <div class="battle">
+  <h1 >
     Join the Arena! 
   </h1>
-</div>
+<div class="battle_one">
     <div class="container">
       <h2>Player One</h2>
       <div class="card">
@@ -51,8 +50,9 @@
       <button class="switch-button" @click="fetchPokemon('pokemonTwo')">Switch Pokemon</button>
     </div>
 
-    
   </div>
+  </div>
+
 
 </template>
 
@@ -62,20 +62,21 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      pokemon:null,
       pokemonOne: null,
       pokemonTwo: null,
     };
   },
   methods: {
     fetchPokemon(player) {
-      const pokemonId = Math.floor(Math.random() * 200) + 1;
+      const pokemonId = Math.floor(Math.random() * 200) + 1;  // Random pokemons
       axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
         .then(response => {
           this[player] = response.data;
         });
     },
     fight() {
-      // Simple fight logic: the Pokemon with higher base HP wins
+      // the Pokemon with higher base HP wins
       if (this.pokemonOne.stats[0].base_stat > this.pokemonTwo.stats[0].base_stat) {
         alert(`${this.pokemonOne.name} wins!`);
         this.fetchPokemon(this.pokemonOne);
@@ -89,8 +90,9 @@ export default {
     },
   },
   created() {
-    this.fetchPokemon('pokemonOne');
-    this.fetchPokemon('pokemonTwo');
+    this.fetchPokemon('pokemon'); // default pokemon
+    this.fetchPokemon('pokemonOne');// default pokemon
+    this.fetchPokemon('pokemonTwo');// default pokemon
   },
 };
 </script>
@@ -101,8 +103,7 @@ header{
   padding: 5em;
 }
   body, html {
-  margin: 0;
-  padding: 0;
+  
   width: 100%;
   height: 100%;
   font-family: Arial, sans-serif;
@@ -115,7 +116,7 @@ header{
 
 
 #app {
-  padding: 11em;
+  padding:5em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,10 +140,12 @@ header{
 }
 
 h1 {
+  padding: 1em;
   color: #333;
   font-size: 50px;
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 h2 {
   color: #333;
@@ -181,23 +184,7 @@ h2 {
   background-color: #f8bf30;
 }
 
-.game_title{
-text-align: center;
-background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
-display: flex;
-flex-direction: column;
-}
 
-#game{
-  display: flex;
-  padding: 11em;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
-}
 
 .button{
 
@@ -212,4 +199,15 @@ flex-direction: column;
   transition: background-color 0.3s ease;
   
 }
+
+.battle{
+  background: linear-gradient(to bottom right, #a1c4fd, #c2e9fb);
+  padding-bottom:2em;
+  
+}
+.battle_one{
+  display: flex;
+  flex-direction: row;
+}
+
 </style>
